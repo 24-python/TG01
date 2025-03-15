@@ -2,7 +2,7 @@ import asyncio
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message, FSInputFile
-from config import TOKEN
+from config import TOKEN, OPENWATHER_API_KEY
 from aiogram.fsm.context import FSMContext
 from aiogram.fsm.state import State, StatesGroup
 from aiogram.fsm.storage.memory import MemoryStorage
@@ -49,7 +49,7 @@ async def name(message: Message, state: FSMContext):
 @dp.message(Form.age)
 async def age(message: Message, state: FSMContext):
     await state.update_data(age=message.text)
-    await message.answer("Сколько тебе лет?")
+    await message.answer("Ты из какого города?")
     await state.set_state(Form.city)
 
 @dp.message(Form.city)
@@ -63,7 +63,26 @@ async def city(message: Message, state: FSMContext):
     conn.commit()
     conn.close()
 
+    async with aiohttp.ClientSession() as session:
+        async with session.get(f"http://api.openweathermap.org/data/2.5/weather?q={user_data['city']}&appid={OPENWATHER_API_KEY}&units=metric&lang=ru") as response:
+            if response.status == 200:
+                weather_data = await response.json()
+                main = weather_data['main']
+                weather_data = weather_data['weather'][0]
 
+                temperature = main['temp']
+                humidity = main['humidity']
+                description = weather_data['description']
+
+                weather_report = (f"Город - {user_data['city']}\n"
+                                  f"🌡 Температура - {temperature}°C\n"
+                                  f"💧 Влажность воздуха - {humidity}%\n"
+                                  f"☁️ Описание погоды - {description}")
+                await message.answer(weather_report)
+            else:
+                await message.answer("❌ Не удалось получить данные о погоде")
+
+    await state.clear()
 
 async def main():
     await dp.start_polling(bot)

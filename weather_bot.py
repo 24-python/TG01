@@ -20,7 +20,7 @@ def get_weather(city):
         humidity = data["main"]["humidity"]
         weather_desc = data["weather"][0]["description"].capitalize()
 
-        return f"🌡 Температура: {temperature}°C\n💧 Влажность: {humidity}%\n☁️ Погода: {weather_desc}"
+        return f"🌡 Температура: {temperature}°C\n Влажность: {humidity}%\n☁️ Погода: {weather_desc}"
     elif response.status_code == 404:
         return "❌ Город не найден. Проверьте правильность написания!"
     else:
