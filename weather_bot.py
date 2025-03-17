@@ -3,7 +3,7 @@ import requests
 from aiogram import Bot, Dispatcher, F
 from aiogram.filters import CommandStart, Command
 from aiogram.types import Message
-from config import TOKEN_weather, OPENWEATHER_API_KEY
+from config import TOKEN_weather, OPENWATHER_API_KEY
 
 bot = Bot(token=TOKEN_weather)
 dp = Dispatcher()
@@ -11,7 +11,7 @@ dp = Dispatcher()
 
 # Функция для получения погоды
 def get_weather(city):
-    url = f"https://api.openweathermap.org/data/2.5/weather?q={city},RU&appid={OPENWEATHER_API_KEY}&units=metric&lang=ru"
+    url = f"https://api.openweathermap.org/data/2.5/weather?q={city},RU&appid={OPENWATHER_API_KEY}&units=metric&lang=ru"
     response = requests.get(url)
 
     if response.status_code == 200:
@@ -20,7 +20,7 @@ def get_weather(city):
         humidity = data["main"]["humidity"]
         weather_desc = data["weather"][0]["description"].capitalize()
 
-        return f"🌡 Температура: {temperature}°C\n Влажность: {humidity}%\n☁️ Погода: {weather_desc}"
+        return f"🌡 Температура: {temperature}°C\n💧 Влажность: {humidity}%\n☁️ Погода: {weather_desc}"
     elif response.status_code == 404:
         return "❌ Город не найден. Проверьте правильность написания!"
     else:
