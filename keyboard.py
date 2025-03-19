@@ -31,3 +31,22 @@ async def test_inline_keyboard():
 main_dz = ReplyKeyboardMarkup(keyboard=[
     [KeyboardButton(text='Привет!'), KeyboardButton(text='Пока!')],
 ], resize_keyboard=True)
+
+inline_keyboard_dz = InlineKeyboardMarkup(inline_keyboard=[
+    [InlineKeyboardButton(text='Новости', url='https://google.com/news')],
+    [InlineKeyboardButton(text='Музыка', url='https://google.com/music')],
+    [InlineKeyboardButton(text='Видео', url='https://google.com/video')]
+    ])
+
+# Клавиатура с кнопкой "Показать больше"
+def get_show_more_keyboard():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="Показать больше", callback_data="show_more")]
+    ])
+
+# Клавиатура с кнопками "Опция 1" и "Опция 2"
+def get_options_keyboard():
+    return InlineKeyboardMarkup(inline_keyboard=[
+        [InlineKeyboardButton(text="Опция 1", callback_data="option_1")],
+        [InlineKeyboardButton(text="Опция 2", callback_data="option_2")]
+    ])
