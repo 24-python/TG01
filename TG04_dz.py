@@ -14,17 +14,28 @@ import keyboard as kb
 bot = Bot(token=TOKEN)
 dp = Dispatcher()
 
-@dp.message(CommandStart()) # простое привестсвие
+# @dp.message(CommandStart()) # простое привестсвие
+# async def start(message: Message):
+#     await message.answer('Hi! Я - БОТ', reply_markup=kb.main_dz)
+#
+# @dp.message(F.text == 'Привет!') # команда на выборe
+# async def test_button(message: Message):
+#     await message.answer(f'Привет, {message.from_user.first_name}!')
+#
+# @dp.message(F.text == 'Пока!') # команда на выборe
+# async def test_button(message: Message):
+#     await message.answer(f'Пока, {message.from_user.first_name}!')
+
+@dp.message(CommandStart())  # Простое приветствие
 async def start(message: Message):
     await message.answer('Hi! Я - БОТ', reply_markup=kb.main_dz)
 
-@dp.message(F.text == 'Привет!') # команда на выборe
-async def test_button(message: Message):
-    await message.answer(f'Привет, {message.from_user.first_name}!')
-
-@dp.message(F.text == 'Пока!') # команда на выборe
-async def test_button(message: Message):
-    await message.answer(f'Пока, {message.from_user.first_name}!')
+@dp.message(F.text.in_(['Привет!', 'Пока!']))  # Обработка команд "Привет!" и "Пока!"
+async def handle_greetings(message: Message):
+    if message.text == 'Привет!':
+        await message.answer(f'Привет, {message.from_user.first_name}!')
+    elif message.text == 'Пока!':
+        await message.answer(f'Пока, {message.from_user.first_name}!')
 
 async def main():
     await dp.start_polling(bot)
